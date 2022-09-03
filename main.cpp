@@ -3,30 +3,28 @@
 
 int main()
 {
+    DigitalIn gasDetector(D2); 
+    /*
+    voy al constructor de digitalin y usa gpio
+    https://os.mbed.com/docs/mbed-os/v6.15/mbed-os-api-doxy/gpio__api_8h_source.html
+*/
+    gasDetector=gpio_init_in(&gpio, D2); //no se de donde saca gpio pero gpio CREO es un objeto
+    // en fin esto deberia inicializar el pin D2 
 
-    DigitalIn gasDetector(D2);
-    
-    DigitalOut alarmLed(LED2);
-    
-    DigitalInOut buzzer(D3);
-    buzzer.mode(OpenDrain);
-    buzzer.input();    
-    
+
+    DigitalOut alarmLed(LED1);
+
     gasDetector.mode(PullDown);
 
-    alarmLed=ON;
+    alarmLed = OFF;
+
     while (true) {
-            if (gasDetector.read() ==ON) { 
-                buzzer.output();
-                buzzer = LOW;
-                alarmLed = ON;
-                printf("led ON");
-                ThisThread::sleep_for(500ms);
-                alarmLed = OFF;
-                buzzer.input();
-                printf("led OFF");
-                ThisThread::sleep_for(500ms);
-            }
+        if ( gasDetector == ON ) {
+            alarmLed = ON;
+        }
         
+        if ( gasDetector == OFF ) {
+            alarmLed = OFF;
+        }
     }
 }
